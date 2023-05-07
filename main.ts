@@ -37,6 +37,7 @@ export class zone2 {
 
 export namespace Canvas {
 	var drawTick:(number) => void
+	export var canvas:HTMLCanvasElement
 	export var tick:number = 0
 	
 	export function onTick (funct:(number) => void, DisableAutoStart:boolean?) {
@@ -50,6 +51,9 @@ export namespace Canvas {
 		start(60)
 	}
 	export function start (fps:number) {
+		if (canvas === null) {
+			console.error("Canvas is required to start.")
+		}
 		var delay:number = 1000/fps
 		setInterval(function() {
 			tick ++
