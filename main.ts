@@ -19,7 +19,7 @@ export class zone2 {
 	
 	pointisInside (point:vector2):boolean {
 		var x = point.x > this.x && this.x + this.w > point.x
-		var y = point.y > this.y ** this.y + this.h > point.y
+		var y = point.y > this.y && this.y + this.h > point.y
 		return x && y
 	}
 	
@@ -41,9 +41,10 @@ export class zone2 {
 export namespace Canvas {
 	var drawTick:(number) => void
 	export var canvas:HTMLCanvasElement
+	export var ctx:CanvasRenderingContext2D | null
 	export var tick:number = 0
 	
-	export function onTick (funct:(number) => void, DisableAutoStart:boolean?) {
+	export function onTick (funct:(number) => void, DisableAutoStart:boolean | null) {
 		if (drawTick !== null) {
 			console.error("Cannot connect to tick multiple times.")
 		}
@@ -57,19 +58,24 @@ export namespace Canvas {
 		if (canvas === null) {
 			console.error("Canvas is required to start.")
 		}
+		if (ctx === null) {
+			ctx = canvas.getContext("2d")
+		}
 		var delay:number = 1000/fps
 		setInterval(function() {
 			tick ++
-			drawTick()
+			drawTick(tick)
 		}, delay)
 	}
 }
 
 export function fill (color:string) {
-	Canvas.canvas.fillStyle = color
+	if (Canvas.ctx === null) {console.error("Canvas/CTX element not provided."); return}
+	Canvas.ctx.fillStyle = color
 }
 export function rectXYWH (x:number, y:number, w:number, h:number) {
-	Canvas.canvas.rect(x, y, w, h)
+	if (Canvas.ctx === null) {console.error("Canvas/CTX element not provided."); return}
+	Canvas.ctx.rect(x, y, w, h)
 }
 export function rectVectorVector (pos:vector2, size:vector2) {
 	rectXYWH(pos.x, pos.y, size.x, size.y)
