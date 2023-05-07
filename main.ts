@@ -24,7 +24,10 @@ export class zone2 {
 	}
 	
 	deconstruct () {
-		returh this.x, this.y, this.w, this.h
+		return this.x, this.y, this.w, this.h
+	}
+	deconstructAsVectors () {
+		return new vector2(this.x, this.y), new vector2(this.w, this.h)
 	}
 	
 	constructor (x:number, y:number, w:number, h:number) {
@@ -64,4 +67,13 @@ export namespace Canvas {
 
 export function fill (color:string) {
 	Canvas.canvas.fillStyle = color
+}
+export function rectXYWH (x:number, y:number, w:number, h:number) {
+	Canvas.canvas.rect(x, y, w, h)
+}
+export function rectVectorVector (pos:vector2, size:vector2) {
+	rectXYWH(pos.x, pos.y, size.x, size.y)
+}
+export function rect (area:zone2) {
+	rectXYWH(area.x, area.y, area.w, area.h)
 }
