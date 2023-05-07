@@ -33,3 +33,27 @@ export class zone2 {
 		this.w = w;
 		this.h = h;
 	}
+}
+
+export namespace Canvas {
+	var drawTick:(number) => void
+	export var tick:number = 0
+	
+	export function onTick (funct:(number) => void, DisableAutoStart:boolean?) {
+		if (drawTick !== null) {
+			console.error("Cannot connect to tick multiple times.")
+		}
+		drawTick = funct
+		if (DisableAutoStart) {
+			return
+		}
+		start(60)
+	}
+	export function start (fps:number) {
+		var delay:number = 1000/fps
+		setInterval(function() {
+			tick ++
+			drawTick()
+		}, delay)
+	}
+}
