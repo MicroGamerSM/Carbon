@@ -39,12 +39,17 @@ export class zone2 {
 }
 
 export namespace Canvas {
-	var drawTick:(number) => void
+	var drawTick:(tick:number) => void
 	export var canvas:HTMLCanvasElement
 	export var ctx:CanvasRenderingContext2D | null
 	export var tick:number = 0
 	
-	export function onTick (funct:(number) => void, DisableAutoStart:boolean | null) {
+	export function overrideCanvasElement (newCanvas:HTMLCanvasElement) {
+		canvas = newCanvas
+		ctx = newCanvas.getContext("2d")
+	}
+
+	export function onTick (funct:(tick:number) => void, DisableAutoStart:boolean | null) {
 		if (drawTick !== null) {
 			console.error("Cannot connect to tick multiple times.")
 		}
@@ -75,11 +80,37 @@ export function fill (color:string) {
 }
 export function rectXYWH (x:number, y:number, w:number, h:number) {
 	if (Canvas.ctx === null) {console.error("Canvas/CTX element not provided."); return}
+	Canvas.ctx.beginPath()
 	Canvas.ctx.rect(x, y, w, h)
+	Canvas.ctx.closePath()
+	Canvas.ctx.fill()
 }
 export function rectVectorVector (pos:vector2, size:vector2) {
 	rectXYWH(pos.x, pos.y, size.x, size.y)
 }
 export function rect (area:zone2) {
 	rectXYWH(area.x, area.y, area.w, area.h)
+}
+export function ellipseXYR (x:number, y:number, r:number) {
+	if (Canvas.ctx === null) {console.error("Canvas/CTX element not provided."); return}
+	Canvas.ctx.beginPath()
+	Canvas.ctx.ellipse(x, y, r, r, 0, 0, 360)
+	Canvas.ctx.closePath()
+	Canvas.ctx.fill()
+}
+export function ellipseVectorR (pos:vector2, r:number) {
+	ellipseXYR(pos.x, pos.y, r)
+}
+export function ellipseXYRR (x:number, y:number, r1:number, r2:number) {
+	if (Canvas.ctx === null) {console.error("Canvas/CTX element not provided."); return}
+	Canvas.ctx.beginPath()
+	Canvas.ctx.ellipse(x, y, r1, r2, 0, 0, 360)
+	Canvas.ctx.closePath()
+	Canvas.ctx.fill()
+}
+export function ellipseVectorVector (pos:vector2, size:vector2) {
+	ellipseXYRR(pos.x, pos.y, size.x, size.y)
+}
+export function ellipse (area:zone2) {
+	ellipseXYRR(area.x, area.y, area.w, area.h)
 }
