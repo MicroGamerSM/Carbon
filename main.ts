@@ -61,3 +61,7 @@ export namespace Canvas {
 		}, delay)
 	}
 }
+
+export function fill (color:string) {
+	Canvas.canvas.fillStyle = color
+}
